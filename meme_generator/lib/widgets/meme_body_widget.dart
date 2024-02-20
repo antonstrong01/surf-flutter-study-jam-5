@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:meme_generator/widgets/meme_template_1_widget.dart';
 import 'package:meme_generator/widgets/meme_template_2_widget.dart';
