@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meme_generator/widgets/button_widget.dart';
@@ -47,6 +49,21 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
       );
     }
 
+    Future<void> pickImageFromGallery() async {
+      try {
+        final picker = ImagePicker();
+        final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+        if (pickedFile != null) {
+          setState(() {
+            imageUrl = pickedFile.path;
+          });
+        }
+      } catch (e) {
+        print(e);
+      }
+    }
+
     void showImageSourceDialog() {
       showModalBottomSheet(
         context: context,
@@ -79,15 +96,7 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
                 height: 48,
                 onTap: () async {
                   Navigator.of(context).pop();
-                  final picker = ImagePicker();
-                  final pickedFile =
-                      await picker.pickImage(source: ImageSource.gallery);
-
-                  if (pickedFile != null) {
-                    setState(() {
-                      imageUrl = pickedFile.path;
-                    });
-                  }
+                  await pickImageFromGallery();
                 },
               ),
             ],
@@ -97,6 +106,18 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.send),
+            color: Colors.white,
+            onPressed: () {
+              // TODO: Add share functionality here
+            },
+          ),
+        ],
+      ),
       backgroundColor: Colors.black,
       body: Center(
         child: ColoredBox(
@@ -122,10 +143,18 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
                         padding: const EdgeInsets.all(4.0),
                         child: GestureDetector(
                           onTap: showImageSourceDialog,
-                          child: Image.network(
-                            imageUrl,
-                            fit: BoxFit.cover,
-                          ),
+                          child: imageUrl != null
+                              ? (imageUrl.startsWith('http') ||
+                                      imageUrl.startsWith('https'))
+                                  ? Image.network(
+                                      imageUrl,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.file(
+                                      File(imageUrl),
+                                      fit: BoxFit.cover,
+                                    )
+                              : Container(),
                         ),
                       ),
                     ),
@@ -133,7 +162,7 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
 
                   // Text
                   GestureDetector(
-                    onTap: () async {
+                    onTap: () {
                       final controller = TextEditingController();
                       showDialog(
                         context: context,
