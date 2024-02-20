@@ -28,7 +28,7 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Введите URL изображения'),
+          title: const Text('Please enter image URL:'),
           content: TextField(
             controller: controller,
           ),
@@ -51,7 +51,6 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
       showModalBottomSheet(
         context: context,
         builder: (context) => Container(
-          // color: Colors.white,
           padding: const EdgeInsets.all(16),
           height: 250,
           child: Column(
@@ -139,7 +138,7 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
-                          title: const Text('Введите новый текст'),
+                          title: const Text('Please enter meme text:'),
                           content: TextField(
                             controller: controller,
                           ),
@@ -147,10 +146,18 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
                             TextButton(
                               child: const Text('OK'),
                               onPressed: () {
-                                setState(() {
-                                  memeText = controller.text;
-                                });
-                                Navigator.of(context).pop();
+                                if (controller.text.trim().isEmpty) {
+                                  Navigator.of(context).pop();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'Error: No input provided')));
+                                } else {
+                                  setState(() {
+                                    memeText = controller.text;
+                                  });
+                                  Navigator.of(context).pop();
+                                }
                               },
                             ),
                           ],
