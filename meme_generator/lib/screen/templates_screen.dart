@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meme_generator/cubit/template_cubit.dart';
 
 class TempatesScreen extends StatefulWidget {
-  final Function(int) onTemplateSelected;
-
-  const TempatesScreen({super.key, required this.onTemplateSelected});
+  const TempatesScreen({
+    super.key,
+  });
 
   @override
   State<TempatesScreen> createState() => _TempatesScreenState();
@@ -23,7 +25,7 @@ class _TempatesScreenState extends State<TempatesScreen> {
             setState(() {
               selectedTemplate = 1;
             });
-            widget.onTemplateSelected(selectedTemplate);
+            context.read<TemplateCubit>().updateTemplate(selectedTemplate);
           },
         ),
         ListTile(
@@ -33,7 +35,7 @@ class _TempatesScreenState extends State<TempatesScreen> {
             setState(() {
               selectedTemplate = 2;
             });
-            widget.onTemplateSelected(selectedTemplate);
+            context.read<TemplateCubit>().updateTemplate(selectedTemplate);
           },
         ),
       ],
