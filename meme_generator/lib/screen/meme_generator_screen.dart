@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:meme_generator/screen/templates_screen.dart';
 import 'package:meme_generator/widgets/button_widget.dart';
 import 'package:meme_generator/widgets/meme_body_widget.dart';
 import 'package:share_plus/share_plus.dart';
@@ -21,6 +22,13 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
   String memeText = 'Здесь мог бы быть ваш мем';
   String imageUrl =
       'https://i.cbc.ca/1.6713656.1679693029!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_780/this-is-fine.jpg';
+  int selectedTemplate = 1;
+
+  void updateTemplate(int template) {
+    setState(() {
+      selectedTemplate = template;
+    });
+  }
 
   GlobalKey globalKey = GlobalKey();
 
@@ -139,12 +147,18 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
         ],
       ),
       backgroundColor: Colors.black,
+      drawer: Drawer(
+        child: TempatesScreen(
+          onTemplateSelected: updateTemplate,
+        ),
+      ),
       body: MemeBodyWidget(
         globalKey: globalKey,
         decoration: decoration,
         showImageSourceDialog: showImageSourceDialog,
         imageUrl: imageUrl,
         memeText: memeText,
+        selectedTemplate: selectedTemplate,
         setText: (text) {
           setState(() {
             memeText = text;

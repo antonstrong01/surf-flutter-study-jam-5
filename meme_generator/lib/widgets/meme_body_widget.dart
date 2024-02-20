@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:meme_generator/widgets/meme_template_1_widget.dart';
+import 'package:meme_generator/widgets/meme_template_2_widget.dart';
 
 class MemeBodyWidget extends StatelessWidget {
   final GlobalKey globalKey;
@@ -9,6 +11,7 @@ class MemeBodyWidget extends StatelessWidget {
   final String? imageUrl;
   final String memeText;
   final Function setText;
+  final int selectedTemplate;
 
   const MemeBodyWidget({
     super.key,
@@ -18,6 +21,7 @@ class MemeBodyWidget extends StatelessWidget {
     required this.imageUrl,
     required this.memeText,
     required this.setText,
+    required this.selectedTemplate,
   });
 
   @override
@@ -34,80 +38,21 @@ class MemeBodyWidget extends StatelessWidget {
                 horizontal: 50,
                 vertical: 20,
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // Picture
-                  SizedBox(
-                    width: double.infinity,
-                    height: 200,
-                    child: DecoratedBox(
+              child: selectedTemplate == 1
+                  ? Template1(
                       decoration: decoration,
-                      child: Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: GestureDetector(
-                          onTap: () => showImageSourceDialog(),
-                          child: imageUrl != null
-                              ? (imageUrl!.startsWith('http') ||
-                                      imageUrl!.startsWith('https'))
-                                  ? Image.network(
-                                      imageUrl!,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Image.file(
-                                      File(imageUrl!),
-                                      fit: BoxFit.cover,
-                                    )
-                              : Container(),
-                        ),
-                      ),
+                      showImageSourceDialog: showImageSourceDialog,
+                      imageUrl: imageUrl,
+                      memeText: memeText,
+                      setText: setText,
+                    )
+                  : Template2(
+                      decoration: decoration,
+                      showImageSourceDialog: showImageSourceDialog,
+                      imageUrl: imageUrl,
+                      memeText: memeText,
+                      setText: setText,
                     ),
-                  ),
-
-                  // Text
-                  GestureDetector(
-                    onTap: () {
-                      final controller = TextEditingController();
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text('Please enter meme text:'),
-                          content: TextField(
-                            controller: controller,
-                          ),
-                          actions: [
-                            TextButton(
-                              child: const Text('OK'),
-                              onPressed: () {
-                                if (controller.text.trim().isEmpty) {
-                                  Navigator.of(context).pop();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text(
-                                              'Error: No input provided')));
-                                } else {
-                                  setText(controller.text);
-                                  Navigator.of(context).pop();
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    child: Text(
-                      memeText,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontFamily: 'Impact',
-                        fontSize: 40,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
         ),

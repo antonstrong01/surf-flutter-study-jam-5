@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meme_generator/screen/meme_generator_screen.dart';
+import 'package:meme_generator/screen/templates_screen.dart';
 
 class MainScreen extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _children = [
     const MemeGeneratorScreen(),
-    PlaceholderWidget(Colors.green),
+    const TempatesScreen(),
     PlaceholderWidget(Colors.blue),
   ];
 
