@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:meme_generator/widgets/button_widget.dart';
 
 class MemeGeneratorScreen extends StatefulWidget {
@@ -49,26 +50,49 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
     void showImageSourceDialog() {
       showModalBottomSheet(
         context: context,
-        builder: (context) => Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Button.text(
-              text: 'From URL',
-              height: 48,
-              onTap: () {
-                Navigator.of(context).pop();
-                showUrlInputUrlDialog();
-              },
-            ),
-            Button.text(
-              text: 'From Gallery',
-              height: 48,
-              onTap: () {
-                Navigator.of(context).pop();
-                //
-              },
-            ),
-          ],
+        builder: (context) => Container(
+          // color: Colors.white,
+          padding: const EdgeInsets.all(16),
+          height: 250,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text(
+                  'Pease choose image source:',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Button.text(
+                text: 'From URL',
+                height: 48,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  showUrlInputUrlDialog();
+                },
+              ),
+              Button.text(
+                text: 'From Gallery',
+                height: 48,
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  final picker = ImagePicker();
+                  final pickedFile =
+                      await picker.pickImage(source: ImageSource.gallery);
+
+                  if (pickedFile != null) {
+                    setState(() {
+                      imageUrl = pickedFile.path;
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       );
     }
