@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meme_generator/widgets/button_widget.dart';
+import 'package:meme_generator/widgets/meme_body_widget.dart';
 import 'package:share_plus/share_plus.dart';
 
 class MemeGeneratorScreen extends StatefulWidget {
@@ -138,98 +139,17 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
         ],
       ),
       backgroundColor: Colors.black,
-      body: Center(
-        child: RepaintBoundary(
-          key: globalKey,
-          child: ColoredBox(
-            color: Colors.black,
-            child: DecoratedBox(
-              decoration: decoration,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 50,
-                  vertical: 20,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    // Picture
-                    SizedBox(
-                      width: double.infinity,
-                      height: 200,
-                      child: DecoratedBox(
-                        decoration: decoration,
-                        child: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: GestureDetector(
-                            onTap: showImageSourceDialog,
-                            child: imageUrl != null
-                                ? (imageUrl.startsWith('http') ||
-                                        imageUrl.startsWith('https'))
-                                    ? Image.network(
-                                        imageUrl,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Image.file(
-                                        File(imageUrl),
-                                        fit: BoxFit.cover,
-                                      )
-                                : Container(),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    // Text
-                    GestureDetector(
-                      onTap: () {
-                        final controller = TextEditingController();
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Please enter meme text:'),
-                            content: TextField(
-                              controller: controller,
-                            ),
-                            actions: [
-                              TextButton(
-                                child: const Text('OK'),
-                                onPressed: () {
-                                  if (controller.text.trim().isEmpty) {
-                                    Navigator.of(context).pop();
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                'Error: No input provided')));
-                                  } else {
-                                    setState(() {
-                                      memeText = controller.text;
-                                    });
-                                    Navigator.of(context).pop();
-                                  }
-                                },
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                      child: Text(
-                        memeText,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontFamily: 'Impact',
-                          fontSize: 40,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
+      body: MemeBodyWidget(
+        globalKey: globalKey,
+        decoration: decoration,
+        showImageSourceDialog: showImageSourceDialog,
+        imageUrl: imageUrl,
+        memeText: memeText,
+        setText: (text) {
+          setState(() {
+            memeText = text;
+          });
+        },
       ),
     );
   }
