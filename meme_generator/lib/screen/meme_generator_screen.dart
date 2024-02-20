@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meme_generator/widgets/button_widget.dart';
 
 class MemeGeneratorScreen extends StatefulWidget {
   const MemeGeneratorScreen({Key? key}) : super(key: key);
@@ -21,6 +22,57 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
       ),
     );
 
+    void showUrlInputUrlDialog() {
+      final controller = TextEditingController();
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Введите URL изображения'),
+          content: TextField(
+            controller: controller,
+          ),
+          actions: [
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                setState(() {
+                  imageUrl = controller.text;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    void showImageSourceDialog() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Button.text(
+              text: 'From URL',
+              height: 48,
+              onTap: () {
+                Navigator.of(context).pop();
+                showUrlInputUrlDialog();
+              },
+            ),
+            Button.text(
+              text: 'From Gallery',
+              height: 48,
+              onTap: () {
+                Navigator.of(context).pop();
+                //
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Center(
@@ -37,6 +89,7 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
+                  // Picture
                   SizedBox(
                     width: double.infinity,
                     height: 200,
@@ -45,29 +98,7 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(4.0),
                         child: GestureDetector(
-                          onTap: () async {
-                            final controller = TextEditingController();
-                            showDialog(
-                              context: context,
-                              builder: (context) => AlertDialog(
-                                title: const Text('Введите URL изображения'),
-                                content: TextField(
-                                  controller: controller,
-                                ),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('OK'),
-                                    onPressed: () {
-                                      setState(() {
-                                        imageUrl = controller.text;
-                                      });
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
+                          onTap: showImageSourceDialog,
                           child: Image.network(
                             imageUrl,
                             fit: BoxFit.cover,
@@ -76,6 +107,8 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
                       ),
                     ),
                   ),
+
+                  // Text
                   GestureDetector(
                     onTap: () async {
                       final controller = TextEditingController();

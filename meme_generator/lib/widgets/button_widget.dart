@@ -6,7 +6,6 @@ class Button extends StatelessWidget {
       required this.text,
       required this.onTap,
       this.isExpanded = true,
-      this.hasShadow = true,
       this.hasBorder = true,
       this.disabled = false,
       this.child,
@@ -23,7 +22,6 @@ class Button extends StatelessWidget {
 
   final VoidCallback? onTap;
   final bool isExpanded;
-  final bool hasShadow;
   final bool hasBorder;
   final bool disabled;
   final Widget? child;
@@ -49,14 +47,6 @@ class Button extends StatelessWidget {
   BoxBorder? get getBorder => hasBorder
       ? Border.all(width: 2.0, color: borderColor ?? Colors.black)
       : null;
-
-  List<BoxShadow> get getShadow => [
-        if (hasShadow)
-          BoxShadow(
-            color: borderColor ?? Colors.black,
-            offset: const Offset(0.0, 8.0),
-          ),
-      ];
 
   Widget get getChild {
     final textChild = Text(text ?? '',
@@ -103,7 +93,6 @@ class Button extends StatelessWidget {
           color: bgColor ?? Colors.white,
           border: getBorder,
           borderRadius: BorderRadius.circular(borderRadius ?? 16),
-          boxShadow: getShadow,
         ),
         child: getChild,
       ),
