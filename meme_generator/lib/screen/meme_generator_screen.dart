@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:meme_generator/widgets/button_widget.dart';
 
 class MemeGeneratorScreen extends StatefulWidget {
   const MemeGeneratorScreen({Key? key}) : super(key: key);
@@ -11,6 +9,8 @@ class MemeGeneratorScreen extends StatefulWidget {
 
 class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
   String memeText = 'Здесь мог бы быть ваш мем';
+  String imageUrl =
+      'https://i.cbc.ca/1.6713656.1679693029!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_780/this-is-fine.jpg';
 
   @override
   Widget build(BuildContext context) {
@@ -26,79 +26,93 @@ class _MemeGeneratorScreenState extends State<MemeGeneratorScreen> {
       body: Center(
         child: ColoredBox(
           color: Colors.black,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              DecoratedBox(
-                decoration: decoration,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 50,
-                    vertical: 20,
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                        width: double.infinity,
-                        height: 200,
-                        child: DecoratedBox(
-                          decoration: decoration,
-                          child: Padding(
-                            padding: const EdgeInsets.all(4.0),
-                            child: Image.network(
-                              'https://i.cbc.ca/1.6713656.1679693029!/fileImage/httpImage/image.jpg_gen/derivatives/16x9_780/this-is-fine.jpg',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          final controller = TextEditingController();
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Введите новый текст'),
-                              content: TextField(
-                                controller: controller,
-                              ),
-                              actions: [
-                                TextButton(
-                                  child: const Text('OK'),
-                                  onPressed: () {
-                                    setState(() {
-                                      memeText = controller.text;
-                                    });
-                                    Navigator.of(context).pop();
-                                  },
+          child: DecoratedBox(
+            decoration: decoration,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 50,
+                vertical: 20,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    width: double.infinity,
+                    height: 200,
+                    child: DecoratedBox(
+                      decoration: decoration,
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: GestureDetector(
+                          onTap: () async {
+                            final controller = TextEditingController();
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Введите URL изображения'),
+                                content: TextField(
+                                  controller: controller,
                                 ),
-                              ],
-                            ),
-                          );
-                        },
-                        child: Text(
-                          memeText,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            fontFamily: 'Impact',
-                            fontSize: 40,
-                            color: Colors.white,
+                                actions: [
+                                  TextButton(
+                                    child: const Text('OK'),
+                                    onPressed: () {
+                                      setState(() {
+                                        imageUrl = controller.text;
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          child: Image.network(
+                            imageUrl,
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                  GestureDetector(
+                    onTap: () async {
+                      final controller = TextEditingController();
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Введите новый текст'),
+                          content: TextField(
+                            controller: controller,
+                          ),
+                          actions: [
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                setState(() {
+                                  memeText = controller.text;
+                                });
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    child: Text(
+                      memeText,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontFamily: 'Impact',
+                        fontSize: 40,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 100.0),
-              Button.text(
-                text: 'Get new picture',
-                height: 48.0,
-                onTap: () {},
-              ),
-            ],
+            ),
           ),
         ),
       ),
