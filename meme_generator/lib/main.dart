@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meme_generator/screen/main_screen.dart';
 import 'package:meme_generator/screen/meme_generator_screen.dart';
 
 void main() async {
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MemeGeneratorScreen(),
+      home: MainScreen(),
     );
   }
 }
